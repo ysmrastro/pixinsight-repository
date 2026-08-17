@@ -112,3 +112,7 @@ title: "Split Image Solver"
 ## ライセンス
 
 [MIT License](https://github.com/ysmr3104/split-image-solver/blob/main/LICENSE)
+
+## 支援について
+
+スクリプトは無料で公開しています。開発の継続を応援いただける方は [GitHub Sponsors](https://github.com/sponsors/ysmr3104) からご支援いただけます。

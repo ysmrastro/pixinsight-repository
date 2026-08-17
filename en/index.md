@@ -21,3 +21,7 @@ Custom scripts and tools for PixInsight.
   </a>
 </div>
 </div>
+
+## Support
+
+These scripts are free to use. If you would like to support their continued development, you can do so via [GitHub Sponsors](https://github.com/sponsors/ysmr3104).
