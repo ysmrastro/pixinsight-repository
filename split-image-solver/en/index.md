@@ -112,3 +112,7 @@ Accuracy ranking: **Local > API > ImageSolver**. **ImageSolver mode** requires n
 ## License
 
 [MIT License](https://github.com/ysmr3104/split-image-solver/blob/main/LICENSE)
+
+## Support
+
+This script is free to use. If you would like to support its continued development, you can do so via [GitHub Sponsors](https://github.com/sponsors/ysmr3104).

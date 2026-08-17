@@ -118,3 +118,7 @@ The Process Console displays fit details including per-star residuals, corner co
 ## License
 
 [MIT License](https://github.com/ysmr3104/manual-image-solver/blob/main/LICENSE)
+
+## Support
+
+This script is free to use. If you would like to support its continued development, you can do so via [GitHub Sponsors](https://github.com/sponsors/ysmr3104).
