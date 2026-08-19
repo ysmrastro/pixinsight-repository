@@ -27,6 +27,11 @@ https://ysmrastro.github.io/pixinsight-scripts/
     <h3>Split Image Solver</h3>
     <p>広角星野写真を分割してプレートソルブし、WCS を統合して元画像に適用します。ImageSolver では対応できない超広角画像の SPCC 実行に対応。</p>
   </a>
+  <a href="{{ site.baseurl }}/meteor-composer/" class="script-card">
+    <img src="{{ site.baseurl }}/assets/images/meteor-composer/card.jpg" alt="Meteor Composer">
+    <h3>Meteor Composer</h3>
+    <p>一晩分の連番画像から流星を自動検出し、人の目で採否を判断して流星群コンポジットを生成します。何も自動では捨てません。</p>
+  </a>
 </div>
 </div>
 

@@ -19,6 +19,11 @@ Custom scripts and tools for PixInsight.
     <h3>Split Image Solver</h3>
     <p>Splits wide-angle astrophotos into tiles, plate-solves each tile, and integrates the WCS solutions into the full image. Enables SPCC on ultra-wide-angle images that ImageSolver cannot handle.</p>
   </a>
+  <a href="{{ site.baseurl }}/meteor-composer/en/" class="script-card">
+    <img src="{{ site.baseurl }}/assets/images/meteor-composer/card.jpg" alt="Meteor Composer">
+    <h3>Meteor Composer</h3>
+    <p>Detects meteors across a night of registered frames, lets you screen the candidates by eye, and composites the accepted ones onto a master light. Nothing is discarded automatically.</p>
+  </a>
 </div>
 </div>
 
