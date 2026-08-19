@@ -5,3 +5,5 @@ main:
     url: /manual-image-solver/
   - title: "Split Image Solver"
     url: /split-image-solver/
+  - title: "Meteor Composer"
+    url: /meteor-composer/
