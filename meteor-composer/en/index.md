@@ -23,6 +23,12 @@ The Perseids on 12 August 2026. 31 meteors accepted out of 654 frames shot with 
 
 The candidate list is on the left, a full-frame preview in the centre, and the selected candidate at 1:1 on the right. Each candidate carries the length, angle, elongation, track length and score measured during detection, and the list can be sorted by score or by capture order. The purple region at the lower left is the exclusion mask — here a band tilted 37 degrees off the left edge, keeping the landscape out of detection.
 
+The two preview panes answer different questions, and neither of them asks you to hunt for the candidate.
+
+**The right-hand pane is always centred on the selected candidate.** Around it sits about 2.5 times the candidate's own size of context, adjustable with the **+** and **-** buttons above the pane, and a thin rectangle marks the candidate itself so you can tell the detection from its surroundings. For a candidate near the edge of the frame the crop shifts rather than shrinks, so the magnification stays the same instead of jumping scale.
+
+**The centre pane keeps its own zoom, and while zoomed in it scrolls to follow the selection** — but only when the candidate is not already on screen. Stepping through candidates that sit close together therefore does not shake the view. At Fit it never moves, since the whole frame is already visible.
+
 Verdicts are single keystrokes — `M` (meteor), `N` (not a meteor), `U` (uncertain) — and **every verdict is saved as you make it.**
 
 ## Four stages
