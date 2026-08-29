@@ -108,10 +108,16 @@ If you were going to integrate the night anyway, this costs almost nothing.
 
 ## Input data
 
-- **Tracked exposures on an equatorial mount** — the input is the `registered` images, aligned and debayered by WBPP
-- **Fixed-tripod exposures** — the input is the `debayered` images as they are. **Nothing is aligned, at any stage**
+Chosen with **System** in the dialog. What you are choosing is not how the frames were shot but **which coordinate system the result comes out in**.
 
-Which one you are working in is chosen with **System** in the dialog. From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a different coordinate system.
+- **Sky-referenced** — the input is the `registered` images, aligned and debayered by WBPP. Tracked exposures on an equatorial mount, and **fixed-tripod exposures short enough for StarAlignment to solve**
+- **Ground-referenced** — the input is the `debayered` images as they are. **Nothing is aligned, at any stage. A fixed tripod only**
+
+**A fixed tripod can use either.** Short enough for the stars to stay points and sky-referenced works, which is all this script could do before 1.2.0. Shoot for longer and alignment stops solving, and sky-referenced stops being available.
+
+**Ground-referenced cannot be used with a tracked mount.** It relies on the camera not having moved; track the sky and it is the landscape that moves between frames.
+
+From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a different coordinate system.
 
 ## Sky-referenced and ground-referenced
 
