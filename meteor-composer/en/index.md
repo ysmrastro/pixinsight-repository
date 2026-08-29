@@ -106,6 +106,8 @@ The lowest-scoring meteor came out at **0.446**. The presets sit well below it o
 
 If you were going to integrate the night anyway, this costs almost nothing.
 
+**It is not a complete answer, though.** james7, who suggested it, reports that in practice **the rejection map carries a lot of satellite trails and a fair number of hot pixels**, and that he could not say whether his fainter meteor would have stood out among them. Treat it as one more list to check the candidates against, not as the ground truth about what was missed.
+
 ## Input data
 
 Chosen with **System** in the dialog. What you are choosing is not how the frames were shot but **which coordinate system the result comes out in**.
@@ -118,6 +120,8 @@ Chosen with **System** in the dialog. What you are choosing is not how the frame
 **Ground-referenced cannot be used with a tracked mount.** It relies on the camera not having moved; track the sky and it is the landscape that moves between frames.
 
 From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a different coordinate system.
+
+**For registering a short fixed-tripod sequence sky-referenced**, james7 gave this on the forum from a 50mm, 30-minute, 400+ frame run: with the exposures short enough that the stars are still round, **StarAlignment needs nothing special**. It does align more accurately, though, **with Surface Splines as the registration model**, because the field rotates.
 
 ## Sky-referenced and ground-referenced
 
