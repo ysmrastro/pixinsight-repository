@@ -29,6 +29,8 @@ The two preview panes answer different questions, and neither of them asks you t
 
 **The centre pane keeps its own zoom, and while zoomed in it scrolls to follow the selection** — but only when the candidate is not already on screen. Stepping through candidates that sit close together therefore does not shake the view. At Fit it never moves, since the whole frame is already visible.
 
+**Both previews share one stretch setting**, on the toolbar above them: `None` shows the frame as it is, `Linked` stretches the three channels together and keeps their colour balance, `Unlinked` stretches each channel to its own histogram. `Unlinked` is the default because it brings out a faint trail against a coloured sky, and `Linked` is the one to switch to when you are judging a trail by its colour.
+
 Verdicts are single keystrokes — `M` (meteor), `N` (not a meteor), `U` (uncertain) — and **every verdict is saved as you make it.**
 
 ## Four stages
@@ -50,6 +52,7 @@ Verdicts are single keystrokes — `M` (meteor), `N` (not a meteor), `U` (uncert
 - **Exclusion regions**: keep the landscape or a streetlight out of detection, either as per-edge depth and tilt, or as a painted image
 - **Fragment merging**: when one trail is detected in pieces, collinear fragments are merged back into a single candidate
 - **Trail masks from measured light**: the mask follows the actual spread of the trail's light, so the composite leaves no seam in the background
+- **A frame that does not match the master is not composited silently**: you are told what was measured and asked whether to leave it out, composite it anyway, or stop
 - **Interruptible**: detection can be stopped at any point and keeps what it has found
 
 ### Exclusion regions
@@ -125,6 +128,7 @@ You can stop part way through screening and pick up again with **Load session...
 - **Too many candidates**: tick `Hide satellites and aircraft` and raise `Cutoff` to `Standard` or `Strict`. Tightening the cutoff does raise the chance of missing a meteor, so it is worth going through `Loose` once first
 - **A meteor never appears as a candidate**: check that the exclusion mask is not too wide. The excluded area is reported to the console when `Run detection` starts
 - **The area around a composited meteor looks wrong**: trail masks are built from the light distribution, so a meteor that spanned an exposure boundary (recorded across two consecutive frames) can leave a seam
+- **A frame was left out of the composite**: the message says what was measured about it. `x% of this frame has no data` means alignment pushed that much of it off the frame, which happens at the beginning and end of a long session. `only n of its detail lines up` means the frame and the master are at the same brightness but do not show the same sky — the usual cause is one of the two not having been debayered. `n times dimmer than the master` means exactly that. Whichever it is, you are asked whether to leave it out, composite it anyway, or stop, and the answer covers the rest of the run
 - **Detection is slow**: I/O dominates. Keep the registered frames on an SSD
 
 ## License
