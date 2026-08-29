@@ -53,6 +53,7 @@ Verdicts are single keystrokes — `M` (meteor), `N` (not a meteor), `U` (uncert
 - **Fragment merging**: when one trail is detected in pieces, collinear fragments are merged back into a single candidate
 - **Trail masks from measured light**: the mask follows the actual spread of the trail's light, so the composite leaves no seam in the background
 - **A frame that does not match the master is not composited silently**: you are told what was measured and asked whether to leave it out, composite it anyway, or stop
+- **Fixed tripod switches coordinate system, not settings**: a long fixed-tripod night runs from detection to composite without a single frame being aligned
 - **Interruptible**: detection can be stopped at any point and keeps what it has found
 
 ### Exclusion regions
@@ -107,12 +108,62 @@ If you were going to integrate the night anyway, this costs almost nothing.
 
 ## Input data
 
-The input is registered images, aligned and debayered by WBPP.
+Chosen with **System** in the dialog. What you are choosing is not how the frames were shot but **which coordinate system the result comes out in**.
 
-- **Tracked exposures on an equatorial mount**
-- **Fixed-tripod exposures** that follow the NPF rule, with stars still recorded as points
+- **Sky-referenced** — the input is the `registered` images, aligned and debayered by WBPP. Tracked exposures on an equatorial mount, and **fixed-tripod exposures short enough for StarAlignment to solve**
+- **Ground-referenced** — the input is the `debayered` images as they are. **Nothing is aligned, at any stage. A fixed tripod only**
 
-Fixed exposures long enough to trail the stars are out of scope, since StarAlignment will not solve them. A fixed tripod also drifts across the sky over the night, which puts a focal-length-dependent ceiling on total shooting time.
+**A fixed tripod can use either.** Short enough for the stars to stay points and sky-referenced works, which is all this script could do before 1.2.0. Shoot for longer and alignment stops solving, and sky-referenced stops being available.
+
+**Ground-referenced cannot be used with a tracked mount.** It relies on the camera not having moved; track the sky and it is the landscape that moves between frames.
+
+From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a different coordinate system.
+
+## Sky-referenced and ground-referenced
+
+**Do you want the meteors in the right place among the stars, or in the right place against the landscape?** Neither is more correct than the other. They answer different questions.
+
+| | Sky-referenced | Ground-referenced |
+|---|---|---|
+| Detection reads | `registered` | `debayered` |
+| Background of the composite | the master light | one `debayered` frame, or a median of a few |
+| Stars | points | one exposure's worth of trail |
+| Landscape | **smeared into an arc on a long fixed-tripod night** | sharp |
+| Where the meteors land | correct against the stars — the radiant is visible | **correct against the landscape — the picture as it looked** |
+| Alignment | required | **not needed at all** |
+
+**The right-hand column is what a fixed tripod is usually shot for.** The tripod did not move, so a meteor left at the pixel it was recorded on is already in the right place against the ground. It is what you do by hand when you build a fixed-tripod meteor composite, and **not one frame needs registering.**
+
+### What alignment costs on a long fixed-tripod night
+
+Measured on 1045 frames over 4 hours 13 minutes (NIKON ZR, 24mm F4, 13-second exposures, about 63 degrees of sky rotation).
+
+| | Tracked (654 frames) | Fixed, registered | Fixed, debayered |
+|---|---|---|---|
+| Usable frames | 654 / 654 | **718 / 1045** | **1045 / 1045** |
+| Empty area per frame | 0.24–0.42% | 4.3–66.2% (mean 36.5%) | **0.00%** |
+| Candidates per frame | 0.57 | 3.81 | **1.63** |
+| Candidates along an edge, per frame | 3 out of 376 | **2.00** | **0.00** |
+
+**3.81 − 2.00 = 1.81 ≈ 1.63.** Everything registration added to the candidate list is the boundary of the empty area. Choosing a reference frame in the middle of the night only brings the worst empty area from 66% down to 59%: it is the geometry of a field that has rotated away from its reference, and no setting solves it.
+
+And since integration aligns the sky, **the landscape in the master light is stretched into a 63-degree arc.**
+
+This data was provided by **mave**.
+
+### Stacking the background
+
+A single frame as the background carries a single frame's noise. The other option is **a median of several frames, none of them aligned**. The landscape stays sharp, the meteors, satellites and aircraft drop out of the median, and the noise falls. What it costs is the stars.
+
+| Frames | Noise vs one frame | Sky rotation | Time |
+|---|---|---|---|
+| 5 | 0.59 | 0.23° | 3 s |
+| **15 (default)** | **0.37** | **0.82°** | 25 s |
+| 31 | 0.27 | 1.75° | 37 s |
+
+It is off by default. **How long a star trail belongs in the picture is a judgement about the picture**, so do not read the default as a recommendation. The dialog shows the trail length worked out from your own frame interval.
+
+The background is written out as `<output name>_background.xisf`, so you can look at it before compositing.
 
 ## Measured results
 
@@ -158,12 +209,15 @@ Once installed, launch it from **Script > Image Analysis > MeteorComposer** or *
 
 ## Usage
 
-1. Point **Frames** at the directory of registered frames. The first one appears in the preview
-2. Set **Output**. Detection results, verdicts and the composite all go here — **nothing is ever written to the input directory**
-3. Use **Mask** to exclude the landscape if you need to
-4. Run **Run detection**
-5. Judge the candidates one at a time (`M` meteor / `N` not a meteor / `U` uncertain)
-6. Use **Compose...** to pick a master light and build the composite
+1. Choose **System**: **Sky-referenced** for tracked frames, **Ground-referenced** for a fixed tripod
+2. Point **Frames** at the directory of frames — `registered` for sky-referenced, `debayered` for ground-referenced. The first one appears in the preview
+3. Set **Output**. Detection results, verdicts and the composite all go here — **nothing is ever written to the input directory**
+4. Use **Mask** to exclude the landscape if you need to
+5. Run **Run detection**
+6. Judge the candidates one at a time (`M` meteor / `N` not a meteor / `U` uncertain)
+7. Use **Compose...** to pick the background and build the composite — the master light when sky-referenced, one of the `debayered` frames (the middle of the night by default) when ground-referenced
+
+**System locks once there are detection results.** Detection, screening and compositing all have to happen in one coordinate system; switching part way would leave candidates found in one about to be composited in the other. Reset unlocks it.
 
 You can stop part way through screening and pick up again with **Load session...**.
 
@@ -172,6 +226,8 @@ You can stop part way through screening and pick up again with **Load session...
 - **Too many candidates**: tick `Hide satellites and aircraft` and raise `Cutoff` to `Standard` or `Strict`. Tightening the cutoff does raise the chance of missing a meteor, so it is worth going through `Loose` once first
 - **A meteor never appears as a candidate**: check that the exclusion mask is not too wide. The excluded area is reported to the console when `Run detection` starts
 - **The area around a composited meteor looks wrong**: trail masks are built from the light distribution, so a meteor that spanned an exposure boundary (recorded across two consecutive frames) can leave a seam
+- **A warning appears when I choose ground-referenced**: the directory's own name disagrees with the choice. Using `registered` frames for a ground-referenced composite draws the landscape as an arc; using `debayered` frames for a sky-referenced one places the meteors by pixel rather than by where they were among the stars. It is a warning, not a refusal — carry on if this really is the directory you meant
+- **I want to use an edited image as the ground-referenced background**: **it has to be linear.** The composite matches the frame's brightness to the background across the sky pixels, and a stretched file breaks that. A master light integrated without registering the frames is linear and can be used
 - **A frame was left out of the composite**: the message says what was measured about it. `x% of this frame has no data` means alignment pushed that much of it off the frame, which happens at the beginning and end of a long session. `only n of its detail lines up` means the frame and the master are at the same brightness but do not show the same sky — the usual cause is one of the two not having been debayered. `n times dimmer than the master` means exactly that. Whichever it is, you are asked whether to leave it out, composite it anyway, or stop, and the answer covers the rest of the run
 - **Detection is slow**: I/O dominates. Keep the registered frames on an SSD
 
