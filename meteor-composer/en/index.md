@@ -61,6 +61,50 @@ Landscape and streetlights can be kept out of detection. The excluded region is 
 
 Note that **the area outside the registered frame — what the alignment pushed off the edge — is excluded automatically**, so there is no need to paint over it. Painting a wide margin by hand costs you any meteor that fell inside it.
 
+## Reading the score
+
+The `Score` column starts at 1.0 and is **multiplied by one factor for each condition a candidate meets**. It exists to put the likely ones first, not to state a probability, and **none of it discards anything.**
+
+| Condition | Factor | What it is looking at |
+|---|---|---|
+| Appears in the same place with the same shape 4 or more times | **× 0.02** | It never moves, so nothing flew past here — usually a star |
+| Travels across 3 or more frames | **× 0.15** | Longer than a meteor can last: a satellite or an aircraft |
+| Runs along the border of the area with no data | **× 0.02** | That border is a straight line, and this is it |
+| Rank of the trail's green fraction | **× 0.30 – 1.00** | Meteors lean green, but not enough to decide alone |
+
+- "Never moves" and "travels" are exclusive. Something that is not moving is not a satellite, and reporting it as one would be wrong
+- The lowest possible score is 0.00012, so it **never reaches zero**. A candidate sorts to the bottom; it never leaves the list
+- **Length, elongation and brightness are not in the score.** They decide what detection picks up in the first place; they are not used to rank what it picked up
+- Colour is scored by **rank within your own session**, never against a fixed threshold — the distribution of green fraction moves with the camera, since a Bayer array has twice as many green photosites. The lowest rank only reaches 0.30, so a meteor that does not look green cannot be sunk by colour alone
+
+### Measured cutoffs
+
+Measured over 654 frames: 411 candidates, 31 of them meteors.
+
+| Cutoff | Meteors kept | Candidates left | Preset |
+|---|---|---|---|
+| 0.00 | 31 / 31 | 411 | **Loose** (default — hides nothing) |
+| 0.05 | 31 / 31 | 369 | **Standard** |
+| 0.20 | 31 / 31 | 116 | **Strict** |
+| 0.40 | 31 / 31 | 100 | |
+| 0.50 | **29 / 31** | 87 | ← meteors start being lost here |
+
+The lowest-scoring meteor came out at **0.446**. The presets sit well below it on purpose: a threshold read off one night's data is fitted to that night.
+
+**Every candidate carries the reason it was scored down.** Being asked to trust an ordering is worth nothing if you cannot check it.
+
+## Checking for yourself what it missed
+
+"Meteors that never showed up as a candidate" can only be counted if you already know what you missed. james7 pointed out a way round that on the PixInsight forum.
+
+**Look at the pixel rejection map from integrating all your frames.** A meteor appears in one frame only, so it is rejected, and it shows up in the rejection map as a streak. That map has nothing to do with this script and can be made before running it, which makes it **an independent list to check the candidate list against.**
+
+1. Integrate all the frames with ImageIntegration, with `Generate rejection maps` enabled
+2. Count the meteor-like streaks in the rejection map
+3. Check whether MeteorComposer proposed the same ones
+
+If you were going to integrate the night anyway, this costs almost nothing.
+
 ## Input data
 
 The input is registered images, aligned and debayered by WBPP.
