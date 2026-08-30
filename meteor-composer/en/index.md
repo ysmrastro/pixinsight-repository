@@ -96,7 +96,7 @@ The lowest-scoring meteor came out at **0.446**. The presets sit well below it o
 
 ## Checking for yourself what it missed
 
-"Meteors that never showed up as a candidate" can only be counted if you already know what you missed. james7 pointed out a way round that on the PixInsight forum.
+"Meteors that never showed up as a candidate" can only be counted if you already know what you missed. There is a way round that.
 
 **Look at the pixel rejection map from integrating all your frames.** A meteor appears in one frame only, so it is rejected, and it shows up in the rejection map as a streak. That map has nothing to do with this script and can be made before running it, which makes it **an independent list to check the candidate list against.**
 
@@ -106,7 +106,7 @@ The lowest-scoring meteor came out at **0.446**. The presets sit well below it o
 
 If you were going to integrate the night anyway, this costs almost nothing.
 
-**It is not a complete answer, though.** james7, who suggested it, reports that in practice **the rejection map carries a lot of satellite trails and a fair number of hot pixels**, and that he could not say whether his fainter meteor would have stood out among them. Treat it as one more list to check the candidates against, not as the ground truth about what was missed.
+**It is not a complete answer, though.** In practice **the rejection map carries a lot of satellite trails and a fair number of hot pixels**, and a faint meteor will not necessarily stand out among them. Treat it as one more list to check the candidates against, not as the ground truth about what was missed.
 
 ## Input data
 
@@ -121,11 +121,9 @@ Chosen with **System** in the dialog. What you are choosing is not how the frame
 
 From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a different coordinate system.
 
-**For registering a short fixed-tripod sequence sky-referenced**, james7 gave this on the forum from a 50mm, 30-minute, 400+ frame run: with the exposures short enough that the stars are still round, **StarAlignment needs nothing special**.
+**Registering a short fixed-tripod sequence sky-referenced needs nothing special from StarAlignment.** Short enough for the stars to stay round and the defaults solve it.
 
-**Surface Splines are not required.** Choosing them as the registration model does align more accurately, since the field rotates — but **registration takes a great deal longer**. It is accuracy traded against time, so decide per session.
-
-**Whether exposures long enough to trail the stars can be registered at all is not known.** james7 has not tried it either. StarAlignment has options that accept candidate stars at greater levels of distortion, but whether they reach as far as a long trail is untested. **Ground-referenced needs no registration at all**, which is the other way out (below).
+**Whether exposures long enough to trail the stars can be registered at all is not known.** Ground-referenced needs no registration at all, which is the other way out (below).
 
 ## Sky-referenced and ground-referenced
 
@@ -141,23 +139,6 @@ From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a 
 | Alignment | required | **not needed at all** |
 
 **The right-hand column is what a fixed tripod is usually shot for.** The tripod did not move, so a meteor left at the pixel it was recorded on is already in the right place against the ground. It is what you do by hand when you build a fixed-tripod meteor composite, and **not one frame needs registering.**
-
-### What alignment costs on a long fixed-tripod night
-
-Measured on 1045 frames over 4 hours 13 minutes (NIKON ZR, 24mm F4, 13-second exposures, about 63 degrees of sky rotation).
-
-| | Tracked (654 frames) | Fixed, registered | Fixed, debayered |
-|---|---|---|---|
-| Usable frames | 654 / 654 | **718 / 1045** | **1045 / 1045** |
-| Empty area per frame | 0.24–0.42% | 4.3–66.2% (mean 36.5%) | **0.00%** |
-| Candidates per frame | 0.57 | 3.81 | **1.63** |
-| Candidates along an edge, per frame | 3 out of 376 | **2.00** | **0.00** |
-
-**3.81 − 2.00 = 1.81 ≈ 1.63.** Everything registration added to the candidate list is the boundary of the empty area. Choosing a reference frame in the middle of the night only brings the worst empty area from 66% down to 59%: it is the geometry of a field that has rotated away from its reference, and no setting solves it.
-
-And since integration aligns the sky, **the landscape in the master light is stretched into a 63-degree arc.**
-
-This data was provided by **mave**.
 
 ### Stacking the background
 
