@@ -121,7 +121,11 @@ Chosen with **System** in the dialog. What you are choosing is not how the frame
 
 From 1.2.0 a fixed tripod is not treated as a harder alignment problem but as a different coordinate system.
 
-**For registering a short fixed-tripod sequence sky-referenced**, james7 gave this on the forum from a 50mm, 30-minute, 400+ frame run: with the exposures short enough that the stars are still round, **StarAlignment needs nothing special**. It does align more accurately, though, **with Surface Splines as the registration model**, because the field rotates.
+**For registering a short fixed-tripod sequence sky-referenced**, james7 gave this on the forum from a 50mm, 30-minute, 400+ frame run: with the exposures short enough that the stars are still round, **StarAlignment needs nothing special**.
+
+**Surface Splines are not required.** Choosing them as the registration model does align more accurately, since the field rotates — but **registration takes a great deal longer**. It is accuracy traded against time, so decide per session.
+
+**Whether exposures long enough to trail the stars can be registered at all is not known.** james7 has not tried it either. StarAlignment has options that accept candidate stars at greater levels of distortion, but whether they reach as far as a long trail is untested. **Ground-referenced needs no registration at all**, which is the other way out (below).
 
 ## Sky-referenced and ground-referenced
 
