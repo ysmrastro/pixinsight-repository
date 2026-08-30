@@ -1,0 +1,8 @@
+# 作業指示は commit しない。
+#
+# このリポジトリは GitHub Pages で公開されている紹介サイトで、ソースコードは
+# 入りません。作業指示（CLAUDE.md）の実体は pixinsight-handbook にあり、ここ
+# には symlink だけを置きます。張るのは dotfiles/pixinsight/setup.sh です。
+#
+#   pixinsight-handbook/repos/pixinsight-repository.md
+CLAUDE.md
